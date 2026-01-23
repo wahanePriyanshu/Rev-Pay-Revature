@@ -1,0 +1,106 @@
+package com.revpay.controller;
+
+import java.util.Scanner;
+
+import com.revpay.model.User;
+import com.revpay.service.UserService;
+import com.revpay.service.UserServiceImpl;
+
+public class AuthController {
+
+	private final UserService userService = new UserServiceImpl();
+    private final Scanner scanner = new Scanner(System.in);
+
+    public void start() {
+        while (true) {
+            System.out.println("\n=== Welcom to RevPay  ===");
+            System.out.println("1. Register");
+            System.out.println("2. Login");
+            System.out.println("3. Exit");
+            System.out.print("Choose option: ");
+
+            int choice = scanner.nextInt();
+            scanner.nextLine(); // consume newline
+
+            switch(choice) {
+            case 1:
+            	register();
+            	break;
+            case 2:
+            	login();
+            	break;
+            case 3:
+            	System.out.println("Thank you for using RevPay");
+            	return;
+            default :
+            	System.out.println("Invalid choice");
+            }
+        }
+    }
+
+    private void register() {
+        System.out.println("\n--- User Registration ---");
+
+        System.out.print("Account Type (PERSONAL/BUSINESS): ");
+        String accountType = scanner.nextLine().toUpperCase();
+
+        System.out.print("Full Name: ");
+        String fullName = scanner.nextLine();
+
+        System.out.print("Email: ");
+        String email = scanner.nextLine();
+
+        System.out.print("Phone: ");
+        String phone = scanner.nextLine();
+
+        System.out.print("Password: ");
+        String password = scanner.nextLine();
+
+        System.out.print("Transaction PIN: ");
+        String pin = scanner.nextLine();
+
+        System.out.print("Security Question: ");
+        String question = scanner.nextLine();
+
+        System.out.print("Security Answer: ");
+        String answer = scanner.nextLine();
+
+       User user = new User(
+    		   0, accountType,
+    		   fullName,
+    		   email,
+    		   phone,
+    		   password,
+    		   pin,
+    		   question,
+    		   answer, 0, false, false, null, null
+    		   );
+        boolean success = userService.registerUser(user);
+
+        if (success) {
+            System.out.println("✅ Registration successful!");
+        } else {
+            System.out.println("❌ Registration failed!");
+        }
+    }
+
+    private void login() {
+        System.out.println("\n--- User Login ---");
+
+        System.out.print("Email or Phone: ");
+        String input = scanner.nextLine();
+
+        System.out.print("Password: ");
+        String password = scanner.nextLine();
+
+        User user = userService.login(input, password);
+
+        if (user != null) {
+            System.out.println("✅ Login successful!");
+            System.out.println("Welcome, " + user.getFullName());
+        } else {
+            System.out.println("❌ Invalid credentials or account locked");
+        }
+    }
+	
+}
