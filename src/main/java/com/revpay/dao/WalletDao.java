@@ -1,5 +1,6 @@
 package com.revpay.dao;
 
+import java.math.BigDecimal;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -7,6 +8,7 @@ import java.sql.SQLException;
 
 import com.revpay.model.Wallet;
 import com.revpay.util.DBUtil;
+
 
 public class WalletDao {
 
@@ -54,4 +56,28 @@ public class WalletDao {
 		return null;
 		
 	}
+	
+	
+	public BigDecimal getBalanceByUserId(long userId){
+		
+		String sql ="select balance from wallets where user_id=?";
+		
+		try(Connection con =DBUtil.getConnection();
+		PreparedStatement ps = con.prepareStatement(sql)){
+		
+			ps.setLong(1, userId);
+			ResultSet rs = ps.executeQuery();
+			
+			if(rs.next()) {
+				return rs.getBigDecimal("balance");
+			}
+		
+		}catch(Exception e) {
+			e.printStackTrace();
+		}
+		return java.math.BigDecimal.ZERO;
+		
+	}
+	
+	
 }

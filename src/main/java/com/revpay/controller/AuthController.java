@@ -6,10 +6,14 @@ import com.revpay.model.User;
 import com.revpay.service.UserService;
 import com.revpay.service.UserServiceImpl;
 
+import com.revpay.service.WalletService;
+import com.revpay.service.WalletServiceImpl;
+
 public class AuthController {
 
 	private final UserService userService = new UserServiceImpl();
     private final Scanner scanner = new Scanner(System.in);
+    private final WalletService walletService = new WalletServiceImpl();
 
     public void start() {
         while (true) {
@@ -98,8 +102,11 @@ public class AuthController {
         if (user != null) {
             System.out.println("✅ Login successful!");
             System.out.println("Welcome, " + user.getFullName());
+            
+            System.out.println("Your Wallet Balance : 💸 " 
+            		+ walletService.viewBalance(user.getUserId()));
         } else {
-            System.out.println("❌ Invalid credentials or account locked");
+            System.out.println("❌ Invalid credentials / account locked");
         }
     }
 	
