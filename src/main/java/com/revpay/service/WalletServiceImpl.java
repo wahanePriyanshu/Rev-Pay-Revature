@@ -14,4 +14,12 @@ public class WalletServiceImpl implements WalletService {
 		return walletDao.getBalanceByUserId(userId);
 	}
 
+	@Override
+	public boolean addMoney(long userId, BigDecimal amount) {
+		if(amount.compareTo(BigDecimal.ZERO) <=0) {
+			return false;
+		}
+		return walletDao.addMoney(userId, amount);
+	}
+
 }

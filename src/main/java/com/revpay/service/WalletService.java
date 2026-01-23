@@ -5,5 +5,7 @@ import java.math.BigDecimal;
 public interface WalletService {
 	
 	BigDecimal viewBalance(long userId);
+	
+	boolean addMoney (long userId ,BigDecimal amount);
 
 }

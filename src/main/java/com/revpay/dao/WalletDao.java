@@ -80,4 +80,26 @@ public class WalletDao {
 	}
 	
 	
+	public boolean addMoney(long userId, BigDecimal amount) {
+		
+		String sql = "UPDATE wallets SET balance = balance + ? WHERE user_id = ?";
+		
+		try(Connection con = DBUtil.getConnection();
+		PreparedStatement ps = con.prepareStatement(sql)){
+			
+			ps.setBigDecimal(1, amount);
+			ps.setLong(2, userId);
+			
+			return ps.executeUpdate()==1;
+			
+		}catch(Exception e) {
+			e.printStackTrace();
+		}
+		
+		return false;
+		
+	}
+	
+	
+	
 }

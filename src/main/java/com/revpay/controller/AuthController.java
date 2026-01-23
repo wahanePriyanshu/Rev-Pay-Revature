@@ -1,11 +1,11 @@
 package com.revpay.controller;
 
+import java.math.BigDecimal;
 import java.util.Scanner;
 
 import com.revpay.model.User;
 import com.revpay.service.UserService;
 import com.revpay.service.UserServiceImpl;
-
 import com.revpay.service.WalletService;
 import com.revpay.service.WalletServiceImpl;
 
@@ -101,13 +101,60 @@ public class AuthController {
 
         if (user != null) {
             System.out.println("✅ Login successful!");
-            System.out.println("Welcome, " + user.getFullName());
+            System.out.println(" Welcome, " + user.getFullName());
             
-            System.out.println("Your Wallet Balance : 💸 " 
-            		+ walletService.viewBalance(user.getUserId()));
+//            System.out.println("Your Wallet Balance : 💸 " 
+//            		+ walletService.viewBalance(user.getUserId()));
+            userMenu(user);
         } else {
             System.out.println("❌ Invalid credentials / account locked");
         }
     }
+        
+        private void userMenu(User user) {
+        	System.out.println("--Wallet Menue--");
+        	System.out.println("1.view Balance");
+        	System.out.println("2.Add Money");
+        	System.out.println("3.Logout");
+        	System.out.println("Choose option :");
+        	
+        	int choice = scanner.nextInt();
+        	scanner.nextLine();
+        	
+        	switch(choice) {
+        	case 1:
+        		System.out.println("Wallet Balance :"+
+        		walletService.viewBalance(user.getUserId()));
+        		break;
+        	case 2:
+        		addMoney(user);
+        		break;
+        	case 3:
+        		System.out.println("Logged out Successfully ");
+        		return;
+        	default :
+        		System.out.println("Invalid choice");
+        		
+        	}
+        }
+        
+        
+    
+
+	private void addMoney(User user) {
+		
+		System.out.println("Enter amount to add in wallet :");
+		BigDecimal amount = new BigDecimal(scanner.nextLine());
+		
+		boolean success = walletService.addMoney(user.getUserId(), amount);
+		
+		if(success) {
+			System.out.println("Money added successfully");
+			System.out.println("Updated balance :"
+			+ walletService.viewBalance(user.getUserId()));
+		}else {
+			System.out.println("Failed to add money");
+		}
+	}
+	}
 	
-}
