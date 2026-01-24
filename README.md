@@ -94,6 +94,7 @@ The project is built with a **modular architecture**, focusing on **security, tr
 - Git & GitHub
 
 ## 🗂️ Project Structure
+```text
 RevPay
 ├── pom.xml
 ├── README.md
@@ -152,6 +153,7 @@ RevPay
 │
 └── ERD
     └── RevPay_ER_Diagram.png
+```
 
 ##  How to Run the Project
 
