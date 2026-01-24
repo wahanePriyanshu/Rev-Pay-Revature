@@ -97,21 +97,70 @@ The project is built with a **modular architecture**, focusing on **security, tr
 
 ## 🗂️ Project Structure
 
+## 🗂️ Project Structure
+
+```text
 RevPay
-├── src/main/java
-│ └── com.revpay
-│ ├── controller
-│ ├── service
-│ ├── dao
-│ ├── model
-│ ├── util
-│ └── RevPayApplication.java
-├── src/test/java
-│ └── com.revpay
-├── resources
-│ └── database.sql
 ├── pom.xml
-└── README.md
+├── README.md
+├── src
+│   ├── main
+│   │   ├── java
+│   │   │   └── com.revpay
+│   │   │       ├── controller
+│   │   │       │   ├── AuthController.java
+│   │   │       │   ├── UserController.java
+│   │   │       │   ├── WalletController.java
+│   │   │       │   ├── TransactionController.java
+│   │   │       │   ├── InvoiceController.java
+│   │   │       │   └── LoanController.java
+│   │   │       │
+│   │   │       ├── service
+│   │   │       │   ├── UserService.java
+│   │   │       │   ├── WalletService.java
+│   │   │       │   ├── TransactionService.java
+│   │   │       │   ├── InvoiceService.java
+│   │   │       │   └── LoanService.java
+│   │   │       │
+│   │   │       ├── dao
+│   │   │       │   ├── UserDao.java
+│   │   │       │   ├── WalletDao.java
+│   │   │       │   ├── TransactionDao.java
+│   │   │       │   ├── InvoiceDao.java
+│   │   │       │   └── LoanDao.java
+│   │   │       │
+│   │   │       ├── model
+│   │   │       │   ├── User.java
+│   │   │       │   ├── BusinessUser.java
+│   │   │       │   ├── Wallet.java
+│   │   │       │   ├── Transaction.java
+│   │   │       │   ├── Invoice.java
+│   │   │       │   ├── Loan.java
+│   │   │       │   └── Notification.java
+│   │   │       │
+│   │   │       ├── util
+│   │   │       │   ├── DBConnection.java
+│   │   │       │   ├── PasswordUtil.java
+│   │   │       │   ├── EncryptionUtil.java
+│   │   │       │   └── InputValidator.java
+│   │   │       │
+│   │   │       └── RevPayApplication.java
+│   │   │
+│   │   └── resources
+│   │       ├── database.sql
+│   │       └── log4j.properties
+│   │
+│   └── test
+│       └── java
+│           └── com.revpay
+│               └── service
+│                   └── UserServiceTest.java
+│
+└── ERD
+    └── RevPay_ER_Diagram.png
+```
+
+
 
 ## 🚀 How to Run the Project
 
@@ -120,9 +169,9 @@ RevPay
    git clone https://github.com/wahanePriyanshu/Rev-Pay-Revature.git
 Import the project into IntelliJ IDEA or Eclipse
 
-2.Configure MySQL database and update JDBC credentials
+2. Configure MySQL database and update JDBC credentials
 
-3.Run the SQL script from:
+3. Run the SQL script from:
 
 4.resources/database.sql
 Run:
