@@ -93,13 +93,7 @@ The project is built with a **modular architecture**, focusing on **security, tr
 - Log4J
 - Git & GitHub
 
----
-
 ## 🗂️ Project Structure
-
-## 🗂️ Project Structure
-
-```text
 RevPay
 ├── pom.xml
 ├── README.md
@@ -158,11 +152,8 @@ RevPay
 │
 └── ERD
     └── RevPay_ER_Diagram.png
-```
 
-
-
-## 🚀 How to Run the Project
+##  How to Run the Project
 
 1. Clone the repository
    ```bash
@@ -181,11 +172,11 @@ RevPayApplication.java
 
 # Project Status
 
-- User Registration & Login ✔️
+- User Registration & Login 
 
-- Wallet Creation ✔️
+- Wallet Creation 
 
-- Secure Authentication ✔️
+- Secure Authentication 
 
 - Core transaction flow implemented
 
