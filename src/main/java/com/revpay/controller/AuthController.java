@@ -8,12 +8,15 @@ import com.revpay.service.UserService;
 import com.revpay.service.UserServiceImpl;
 import com.revpay.service.WalletService;
 import com.revpay.service.WalletServiceImpl;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 public class AuthController {
 
 	private final UserService userService = new UserServiceImpl();
     private final Scanner scanner = new Scanner(System.in);
     private final WalletService walletService = new WalletServiceImpl();
+    private static final Logger logger = LogManager.getLogger(AuthController.class);
 
     public void start() {
         while (true) {
@@ -100,14 +103,14 @@ public class AuthController {
         User user = userService.login(input, password);
 
         if (user != null) {
-            System.out.println("✅ Login successful!");
+            logger.info("User logged in successfully : {}",user.getEmail());
             System.out.println(" Welcome, " + user.getFullName());
             
 //            System.out.println("Your Wallet Balance : 💸 " 
 //            		+ walletService.viewBalance(user.getUserId()));
             userMenu(user);
         } else {
-            System.out.println("❌ Invalid credentials / account locked");
+            logger.info("Invalid login attempt for input :",input);
         }
     }
         
@@ -149,7 +152,7 @@ public class AuthController {
 		boolean success = walletService.addMoney(user.getUserId(), amount);
 		
 		if(success) {
-			System.out.println("Money added successfully");
+			logger.info("Money add for userId : {} , amount : {}",user.getUserId(),amount);
 			System.out.println("Updated balance :"
 			+ walletService.viewBalance(user.getUserId()));
 		}else {

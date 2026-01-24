@@ -1,5 +1,6 @@
 package com.revpay.dao;
 
+import org.apache.logging.log4j.LogManager;
 import java.math.BigDecimal;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -11,6 +12,8 @@ import com.revpay.util.DBUtil;
 
 
 public class WalletDao {
+	
+	private static final org.apache.logging.log4j.Logger logger = LogManager.getLogger("WalletDao.class");
 
 	public void createWallet(long userId) {
 		
@@ -93,7 +96,7 @@ public class WalletDao {
 			return ps.executeUpdate()==1;
 			
 		}catch(Exception e) {
-			e.printStackTrace();
+			logger.error("Error while adding money for userId ={}",userId,e);
 		}
 		
 		return false;
