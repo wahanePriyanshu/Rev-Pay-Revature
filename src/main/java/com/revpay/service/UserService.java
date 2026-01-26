@@ -9,4 +9,6 @@ public interface UserService {
 	User login(String emailorPhone , String password);
 	
 	boolean verifyTransactionPin(long userId,String pin);
+	
+	User findReceiver(String emailorPhone);
 }

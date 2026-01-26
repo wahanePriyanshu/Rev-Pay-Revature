@@ -118,7 +118,8 @@ public class AuthController {
         	System.out.println("--Wallet Menue--");
         	System.out.println("1.view Balance");
         	System.out.println("2.Add Money");
-        	System.out.println("3.Logout");
+        	System.out.println("3.Send Money");
+        	System.out.println("4.Logout");
         	System.out.println("Choose option :");
         	
         	int choice = scanner.nextInt();
@@ -133,6 +134,8 @@ public class AuthController {
         		addMoney(user);
         		break;
         	case 3:
+        		sendMoney(user);
+        	case 4:
         		System.out.println("Logged out Successfully ");
         		return;
         	default :
@@ -170,5 +173,50 @@ public class AuthController {
 			System.out.println("Failed to add money");
 		}
 	}
+	
+	private void sendMoney(User sender) {
+		
+		System.out.println(" Enter receiver email or phone no. :");
+		String input = scanner.nextLine();
+		
+		 User receiver = userService.findReceiver(input);
+		
+		if(receiver == null) {
+			System.out.println(" Receiver not found");
+			return;
+		}
+		
+		System.out.println("Enter amount :");
+		BigDecimal amount = new BigDecimal(scanner.nextLine());
+		
+		System.out.println("Enter Transaction PIN :");
+		String pin = scanner.nextLine();
+		
+		if(!userService.verifyTransactionPin(sender.getUserId(), pin)) {
+			System.out.println("Invalid Transaction PIN ");
+			return;
+		}
+		
+		boolean success = walletService.sendMoney(
+				sender.getUserId(),
+				receiver.getUserId(),
+				amount);
+		logger.info("Transaction INFO SenderId = {}, ReceiverId = {}",
+		        sender.getUserId(),
+		        receiver.getUserId());
+
+		
+		if(success) {
+			System.out.println("Money sent successfully to UserId :"+ receiver.getUserId());
+		}else {
+			System.out.println("Transaction failed  (Insufficient balance)");
+		}
+		
+	}
+	
+	
+	
+	
+	
 	}
 	

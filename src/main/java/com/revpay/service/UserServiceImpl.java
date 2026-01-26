@@ -62,6 +62,12 @@ public class UserServiceImpl implements UserService{
 		
 		
 	}
+
+	@Override
+	public User findReceiver(String emailorPhone) {
+		
+		return userDao.findByEmailOrPhone(emailorPhone);
+	}
 	
 	
 	

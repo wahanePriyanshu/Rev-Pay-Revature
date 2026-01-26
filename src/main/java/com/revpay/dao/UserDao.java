@@ -116,7 +116,35 @@ public class UserDao {
 	}
 	
 	
-	
+	public User findByEmailorPhoneExact(String input) {
+		
+		String sql = "select user_id,full_name from users"
+				+ "where email = ? or phone = ?";
+		try(Connection con = DBUtil.getConnection();
+				PreparedStatement ps = con.prepareStatement(sql)){
+			
+			ps.setString(1,input);
+			ps.setString(2, input);
+			
+			ResultSet rs = ps.executeQuery();
+			
+			
+			if(rs.next()) {
+				User user = new User();
+				user.setUserId(rs.getLong("user_id"));
+				user.setFullName(rs.getString("Fill_name"));
+				return user;
+			}
+			
+			
+		}catch(Exception e) {
+			logger.error("Error finding receiver {}",input ,e);
+		}
+				
+		
+		return null;
+		
+	}
 	
 	
 	

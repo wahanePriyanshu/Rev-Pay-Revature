@@ -103,6 +103,56 @@ public class WalletDao {
 		
 	}
 	
+	public boolean deductMoney(long userId,BigDecimal amout) {
+		
+		
+		String sql = "UPDATE wallets SET balance = balance - ? " +
+					    "WHERE user_id = ? AND balance >= ?";
+		try(Connection con = DBUtil.getConnection();
+				PreparedStatement ps = con.prepareStatement(sql)){
+			
+			ps.setBigDecimal(1, amout);
+			ps.setLong(2, userId);
+			ps.setBigDecimal(3, amout);
+			
+			return ps.executeUpdate()==1;
+			
+		}catch(Exception e) {
+			
+		logger.error("Error in deducting money from userId ={}",userId, e);	
+		}
+		
+		return false;
+		
+	}
+	
+	public boolean creditMoney(long userId,BigDecimal amount) {
+		
+		String sql = "UPDATE wallets SET balance = balance + ? WHERE user_id = ?";
+		
+		try(Connection con = DBUtil.getConnection();
+				PreparedStatement ps = con.prepareStatement(sql)){
+			
+			ps.setBigDecimal(1, amount);
+			ps.setLong(2, userId);
+			
+			int rows =ps.executeUpdate();
+			
+			logger.info("Crediting money :, userId={} , Debited = {}",
+					userId,amount,rows);
+			
+			return rows ==1;
+			
+		}catch(Exception e) {
+			
+			logger.error("Error in adding money  for userId ={}",userId,e);
+		}
+		
+		return false;
+	}
+	
+	
+	
 	
 	
 }
