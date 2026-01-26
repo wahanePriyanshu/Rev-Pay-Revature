@@ -149,7 +149,18 @@ public class AuthController {
 		System.out.println("Enter amount to add in wallet :");
 		BigDecimal amount = new BigDecimal(scanner.nextLine());
 		
-		boolean success = walletService.addMoney(user.getUserId(), amount);
+		System.out.println("Enter Transaction PIN :");
+		String pin = scanner.nextLine();
+		
+		boolean pinValid = userService.verifyTransactionPin(user.getUserId(), pin);
+		
+		if(!pinValid) {
+			System.out.println("Invalid Transaction PIN");
+			logger.warn("Invalid transaction PIN attempt for useId ={}",user.getUserId());
+			return;
+		}
+		 boolean success = walletService.addMoney(user.getUserId(), amount);
+		
 		
 		if(success) {
 			logger.info("Money add for userId : {} , amount : {}",user.getUserId(),amount);

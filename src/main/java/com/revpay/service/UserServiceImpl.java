@@ -49,6 +49,19 @@ public class UserServiceImpl implements UserService{
 		
 	}
 
+	@Override
+	public boolean verifyTransactionPin(long userId,String pin) {
+		
+		String storePin = userDao.getTransactionPinByUserId(userId);
+		
+		if(storePin == null) {
+			return false ;
+		}
+		
+		return storePin.equals(pin);
+		
+		
+	}
 	
 	
 	

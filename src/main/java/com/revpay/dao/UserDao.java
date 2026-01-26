@@ -7,9 +7,14 @@ import java.sql.SQLException;
 
 import com.revpay.model.User;
 import com.revpay.util.DBUtil;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 public class UserDao {
 
+	private static final Logger logger =
+            LogManager.getLogger(UserDao.class);
+	
 	public long saveUser(User user) {
 		String sql =  "Insert into users (account_type,full_name,email,"
 				+ "phone,password_hash,transaction_pin"
@@ -87,6 +92,29 @@ public class UserDao {
         
         
 	}
+	
+	
+	public String getTransactionPinByUserId(long userId) {
+		
+		String sql = "select transaction_pin from users where user_id = ?";
+		
+		try(Connection con = DBUtil.getConnection();
+				PreparedStatement  ps = con.prepareStatement(sql)){
+			
+			ps.setLong(1, userId);
+			ResultSet rs = ps.executeQuery();	
+			
+			if(rs.next()) {
+				return rs.getString("transaction_pin");
+			}
+		}
+		catch(Exception e) {
+			logger.error("Error fetching transaction pin for userId = {}",userId,e);
+		}
+		
+		return null;
+	}
+	
 	
 	
 	

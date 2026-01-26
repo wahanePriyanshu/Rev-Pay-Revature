@@ -1,0 +1,12 @@
+# Maven / build
+target/
+bin/
+
+# Logs
+logs/
+
+# Eclipse / IDE
+.classpath
+.project
+.settings/
+.factorypath
