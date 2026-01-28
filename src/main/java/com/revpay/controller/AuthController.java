@@ -1,15 +1,20 @@
 package com.revpay.controller;
 
 import java.math.BigDecimal;
+import java.util.List;
 import java.util.Scanner;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
+import com.revpay.model.Transaction;
 import com.revpay.model.User;
+import com.revpay.service.TransactionService;
+import com.revpay.service.TransactionServiceImpl;
 import com.revpay.service.UserService;
 import com.revpay.service.UserServiceImpl;
 import com.revpay.service.WalletService;
 import com.revpay.service.WalletServiceImpl;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 
 public class AuthController {
 
@@ -17,6 +22,8 @@ public class AuthController {
     private final Scanner scanner = new Scanner(System.in);
     private final WalletService walletService = new WalletServiceImpl();
     private static final Logger logger = LogManager.getLogger(AuthController.class);
+    private final TransactionService transactionService =
+            new TransactionServiceImpl();
 
     public void start() {
         while (true) {
@@ -119,7 +126,8 @@ public class AuthController {
         	System.out.println("1.view Balance");
         	System.out.println("2.Add Money");
         	System.out.println("3.Send Money");
-        	System.out.println("4.Logout");
+        	System.out.println("4. Transaction History");
+        	System.out.println("5.Logout");
         	System.out.println("Choose option :");
         	
         	int choice = scanner.nextInt();
@@ -136,6 +144,9 @@ public class AuthController {
         	case 3:
         		sendMoney(user);
         	case 4:
+        		viewTransactionHistory(user);
+        		break;
+        	case 5:
         		System.out.println("Logged out Successfully ");
         		return;
         	default :
@@ -214,6 +225,28 @@ public class AuthController {
 		
 	}
 	
+	
+	private void viewTransactionHistory(User user) {
+		List<Transaction> list =
+	            transactionService.getUserTransactions(user.getUserId());
+		
+		if(list.isEmpty()) {
+			System.out.println("No transaction found");
+			return;
+			
+		}
+		System.out.println("\n-- Transaction History --");
+		
+		for (Transaction tx : list) {
+	        System.out.println(
+	            tx.getCreatedAt() + " | " +
+	            tx.getTransactionType() + " | " +
+	            tx.getAmount() + " | " +
+	            tx.getStatus()
+	        );
+	    }
+		
+	}
 	
 	
 	

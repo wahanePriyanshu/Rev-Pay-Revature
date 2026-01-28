@@ -4,12 +4,15 @@ import java.math.BigDecimal;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+import com.revpay.dao.TransactionDao;
 import com.revpay.dao.WalletDao;
 
 public class WalletServiceImpl implements WalletService {
 
 
 	private final WalletDao walletDao = new WalletDao();
+	
+	private final TransactionDao transactionDao = new TransactionDao();
 	
 	@Override
 	public BigDecimal viewBalance(long userId) {
@@ -34,7 +37,10 @@ public class WalletServiceImpl implements WalletService {
 		
 		if(!deducted) {
 //			logger.warn("Deduction failed for senderId={}", senderId);
-		
+			
+			transactionDao.saveSendTransaction(senderId, receiverId, amount, "FAILED", "Insufficient balance");
+			
+			
 			return false;
 		}
 		
@@ -43,8 +49,12 @@ public class WalletServiceImpl implements WalletService {
 		if(!credited) {
 			walletDao.creditMoney(senderId, amount);
 //			logger.error("Credit failed for receiverId={}, rollback done", receiverId);
+			
+			transactionDao.saveSendTransaction(senderId, receiverId, amount, "FAILED","Credit failed");
+			
 			return false;
 		}
+		transactionDao.saveSendTransaction(senderId, receiverId, amount, "SUCCESS","Money transfer successful");
 		
 		return true;
 	}
