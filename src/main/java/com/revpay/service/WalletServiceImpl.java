@@ -27,6 +27,12 @@ public class WalletServiceImpl implements WalletService {
 		return walletDao.addMoney(userId, amount);
 	}
 
+	
+	/**
+	 * Transfers money from sender to receiver wallet.
+	 * Validates balance and ensures atomic debit-credit operation.
+	 */
+	
 	@Override
 	public boolean sendMoney(long senderId, long receiverId, BigDecimal amount) {
 		

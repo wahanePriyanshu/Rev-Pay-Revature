@@ -7,6 +7,7 @@ import java.util.Scanner;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+import com.revpay.model.BusinessDetails;
 import com.revpay.model.Transaction;
 import com.revpay.model.User;
 import com.revpay.service.TransactionService;
@@ -15,6 +16,9 @@ import com.revpay.service.UserService;
 import com.revpay.service.UserServiceImpl;
 import com.revpay.service.WalletService;
 import com.revpay.service.WalletServiceImpl;
+import com.revpay.service.BusinessService;
+import com.revpay.service.BusinessServiceImpl;
+
 
 public class AuthController {
 
@@ -24,6 +28,9 @@ public class AuthController {
     private static final Logger logger = LogManager.getLogger(AuthController.class);
     private final TransactionService transactionService =
             new TransactionServiceImpl();
+    private final BusinessService businessService =
+            new BusinessServiceImpl();
+
 
     public void start() {
         while (true) {
@@ -127,7 +134,8 @@ public class AuthController {
         	System.out.println("2.Add Money");
         	System.out.println("3.Send Money");
         	System.out.println("4. Transaction History");
-        	System.out.println("5.Logout");
+        	System.out.println("5. Register as Business");
+        	System.out.println("6.Logout");
         	System.out.println("Choose option :");
         	
         	int choice = scanner.nextInt();
@@ -147,6 +155,9 @@ public class AuthController {
         		viewTransactionHistory(user);
         		break;
         	case 5:
+        		registerBusiness(user);
+        		break;
+        	case 6:
         		System.out.println("Logged out Successfully ");
         		return;
         	default :
@@ -235,20 +246,54 @@ public class AuthController {
 			return;
 			
 		}
-		System.out.println("\n-- Transaction History --");
+		System.out.println("\n---------------- TRANSACTION HISTORY ------------------------------------------------------");
+	    System.out.printf("%-20s %-10s %-10s %-10s %-10s%n",
+	            "DATE", "TYPE", "AMOUNT", "DR/CR", "STATUS");
+	    System.out.println("---------------------------------------------------------------------------------------------");
 		
-		for (Transaction tx : list) {
-	        System.out.println(
-	            tx.getCreatedAt() + " | " +
-	            tx.getTransactionType() + " | " +
-	            tx.getAmount() + " | " +
-	            tx.getStatus()
-	        );
+	    for (Transaction tx : list) {
+
+	        String drCr;
+	        if (tx.getFromUserId() != null && tx.getFromUserId() == user.getUserId()) {
+	            drCr = "DEBIT";
+	        } else {
+	            drCr = "CREDIT";
+	        }
+
+	        System.out.printf("%-20s %-10s %-10s %-10s %-10s%n",
+	                tx.getCreatedAt().toLocalDate(),
+	                tx.getTransactionType(),
+	                tx.getAmount(),
+	                drCr,
+	                tx.getStatus());
 	    }
 		
 	}
 	
-	
+	private void registerBusiness(User user) {
+
+	    BusinessDetails bd = new BusinessDetails();
+	    bd.setUserId(user.getUserId());
+
+	    System.out.print("Business Name: ");
+	    bd.setBusinessName(scanner.nextLine());
+
+	    System.out.print("Business Type: ");
+	    bd.setBusinessType(scanner.nextLine());
+
+	    System.out.print("Tax ID: ");
+	    bd.setTaxId(scanner.nextLine());
+
+	    System.out.print("Address: ");
+	    bd.setAddress(scanner.nextLine());
+
+	    if (businessService.registerBusiness(bd)) {
+	        System.out.println(" Business registration submitted for verification");
+	    } else {
+	        System.out.println("Business registration failed");
+	    }
+	}
+
 	
 	
 	}
